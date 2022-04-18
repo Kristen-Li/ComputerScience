@@ -1,11 +1,7 @@
 """
-CS7646 ML For Trading
-Project 6: Manual Strategy
-Manual Strategy Function
+This file creates manual strategies using indicators
 Wanjun Li
 
-This script implements indicators and generates a trading dataframe. Indicator usage is hardcoded and optimized for 
-JPM from 2008 to the end of 2009.
 """
 
 import pandas as pd
@@ -13,10 +9,8 @@ import numpy as np
 import datetime as dt
 import matplotlib.pyplot as plt
 import warnings
-
 from indicators import ind_sma, ind_OBV, ind_bbp, ind_momentum, ind_MACD,simple_ma
 from marketsimcode import compute_portvals,  get_portfolio_stats
-from BestPossibleStrategy import testPolicy as bps
 from util import get_data, plot_data
 
 
@@ -45,7 +39,6 @@ def testPolicy(symbol='JPM', sd=dt.datetime(2008, 1, 1), ed=dt.datetime(2009, 12
     MMT = ind_momentum(prices, window=5)
 
     macd, macd_s = ind_MACD(prices, ema1_days=12, ema2_days=24, macd_signal_days=9)
-
 
     md = (macd['macd'] - macd_s['macd_signal']).rename('m-d')
     md = md.to_frame()
@@ -106,39 +99,6 @@ def testPolicy(symbol='JPM', sd=dt.datetime(2008, 1, 1), ed=dt.datetime(2009, 12
                 holding = 1000
     print(df_trades.head(20))
     return df_trades
-
-
-def plot_indicators(df, *args):
-    """Accepts a df and indicator df's, returns a plot of the df with indicators"""
-    fig = plt.figure(figsize=(10, 5), dpi=120)
-    plt.plot(df, color='k', label='JPM')
-    plt.rcParams.update({'font.size': 16})
-    plt.xlabel('Date', fontsize=18)
-    plt.ylabel('Share Price', fontsize=18)
-    plt.xticks(rotation=45)
-    fig.suptitle('Bollinger Bands')
-
-    if len(args) > 0:
-        for i in args:
-            plt.plot(i)  # , label=i.name)
-
-    fig.legend(loc=4, bbox_to_anchor=(0.85, 0.25))
-    plt.show()
-
-
-def plot_oscillator(df1, df2, title):
-    """Function that accepts two df's and a plot title, returns a plot of the oscillators"""
-    fig = plt.figure(figsize=(10, 5), dpi=120)
-    plt.plot(df1, color='y', label=df1.name)
-    plt.plot(df2, color='b', label=df2.name)
-    plt.xlabel('Date', fontsize=18)
-    plt.ylabel('Arbitrary Price Percentage', fontsize=18)
-    plt.xticks(rotation=45)
-    fig.suptitle(title, fontsize=24)
-
-    fig.legend(loc=4, bbox_to_anchor=(0.85, 0.25))
-    plt.show()
-
 
 
 
