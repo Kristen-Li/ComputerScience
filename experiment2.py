@@ -59,6 +59,9 @@ if __name__ == "__main__":
     fig.legend(loc=3, bbox_to_anchor=(0.08, 0.6))
     plt.show()
     
+    plt.savefig('exp2.png')
+
+    plt.close() 
     columns = len(learner.xTrain.columns)
     result_df = pd.concat([values, values2, values3, values4, values5],axis=1)
     result_df.rename(columns={0 : 'impact: 0.0005',\
