@@ -4,23 +4,23 @@
 import pandas as pd
 import datetime as dt
 import matplotlib.pyplot as plt
-import marketsimcode
-
 import StrategyLearner as sl
 import ManualStrategy as ms
+import marketsimcode
+
+
 
 """
 This file will generate a graph of normalized portfolio values for manual, strategy learner and baseline model. The portfolio statistics will also be generated."""
 def author():
-    return('wli626')
+    return'wli626'
     
 if __name__ == "__main__":
-    print('Project 8 Experiment1: mtong31')
+    print(' Start Experiment 1 wli626')
     sym = 'JPM'
     sd = dt.datetime(2008,1,1)
     ed = dt.datetime(2009,12,31)
-    sd2 = dt.datetime(2010,1,1)
-    ed2 = dt.datetime(2011,12,31)
+
     sv = 100000
     learner = sl.StrategyLearner(verbose=False, impact=0.00)
     learner.addEvidence(sym, sd, ed, 100000)
@@ -41,7 +41,7 @@ if __name__ == "__main__":
     values_bench /= sv
     values_manual /= sv
     
-    fig = plt.figure(figsize=(10,5), dpi=80)
+    fig = plt.figure(figsize=(12,6), dpi=80)
     df_trades_ms = ms.testPolicy(symbol=sym, sd=sd, ed=ed, sv = 100000)
     for index, marks in df_trades_ms.iterrows():
         if marks[0] > 0:
@@ -51,22 +51,14 @@ if __name__ == "__main__":
         else:
             pass
     plt.plot(values, color='b', label='Strategy')
-    plt.plot(values_bench, color='purple', linestyle=':', linewidth=2, label='Benchmark')
+    plt.plot(values_bench, color='purple', linestyle=':', linewidth=2.1, label='Benchmark')
     plt.plot(values_manual, color='red', label='Manual')
-    plt.xlabel('Dates', fontsize=14)
-    plt.ylabel('Portfolio value', fontsize=14)
+    plt.xlabel('Dates', fontsize=13)
+    plt.ylabel('Portfolio value', fontsize=13)
     
-    fig.suptitle('In Sample Comparison: Benchmark vs Manual vs Strategy', fontsize=18)
+    fig.suptitle('In Sample Comparison: Manual vs Strategy vs Benchmark', fontsize=17)
     fig.legend(loc=3, bbox_to_anchor=(0.08, 0.7))
     plt.show()
-
-
-    
-    columns = len(learner.xTrain.columns)
-    result_df = pd.concat([values, values_bench, values_manual],axis=1)
-    result_df.rename(columns={0 : 'Strategy_Learner', 1 : 'Benchmark', 2 : 'Manual_Strategy'}, inplace=True)
-    # print('Performance comparison: ')
-    # print(result_df)
 
     plt.savefig('exp1.png')
 
@@ -77,7 +69,7 @@ if __name__ == "__main__":
     bench_cr, bench_adr, bench_stddr, bench_sr = marketsimcode.get_portfolio_stats(values_bench)
 
     # Compare portfolio against benchmark
-    print("=== Machine Learning Strategy (MLS) V.S. Manual Strategy (MS) In Sample ===")
+    print("=== Machine Learning Strategy  V.S. Manual Strategy  In Sample ===")
     print("Date Range: {} to {}".format(sd, ed))
     print()
     print("Sharpe Ratio of MLS: {}".format(port_sr_sl))
@@ -102,7 +94,8 @@ if __name__ == "__main__":
     print()
     
 #     Out of sample comparisons
-
+    sd2 = dt.datetime(2010,1,1)
+    ed2 = dt.datetime(2011,12,31)
     learner.addEvidence(sym, sd2, ed2, 100000)
     
     strategy = learner.testPolicy(sym, sd2, ed2)
@@ -121,7 +114,7 @@ if __name__ == "__main__":
     values_bench /= sv
     values_manual /= sv
     
-    fig = plt.figure(figsize=(10,5), dpi=80)
+    fig = plt.figure(figsize=(12,6), dpi=80)
     df_trades_ms = ms.testPolicy(symbol=sym, sd=sd2, ed=ed2, sv = 100000)
     for index, marks in df_trades_ms.iterrows():
         if marks[0] > 0:
@@ -133,20 +126,13 @@ if __name__ == "__main__":
     plt.plot(values, color='b', label='Strategy')
     plt.plot(values_bench, color='purple', linestyle=':', linewidth=2, label='Benchmark')
     plt.plot(values_manual, color='red', label='Manual')
-    plt.xlabel('Dates', fontsize=14)
-    plt.ylabel('Portfolio value', fontsize=14)
+    plt.xlabel('Dates', fontsize=13)
+    plt.ylabel('Portfolio value', fontsize=13)
     
-    fig.suptitle('Out-of Sample Comparison: Benchmark vs Manual vs Strategy', fontsize=18)
+    fig.suptitle('Out-of Sample Comparison: Manual vs Strategy vs Benchmark', fontsize=17)
     fig.legend(loc=3, bbox_to_anchor=(0.08, 0.7))
     plt.show()
 
-
-    
-    columns = len(learner.xTrain.columns)
-    result_df = pd.concat([values, values_bench, values_manual],axis=1)
-    result_df.rename(columns={0 : 'Strategy_Learner', 1 : 'Benchmark', 2 : 'Manual_Strategy'}, inplace=True)
-    # print('Performance comparison: ')
-    # print(result_df)
 
     plt.savefig('exp1out.png')
 
